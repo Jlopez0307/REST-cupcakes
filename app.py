@@ -1,0 +1,2 @@
+"""Flask app for Cupcakes"""
+
