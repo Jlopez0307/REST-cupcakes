@@ -15,13 +15,23 @@ connect_db(app)
 app.config['SECRET_KEY'] = 'cats'
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
-@app.route('/api/cupcakes', methods = ["GET", "POST"])
+@app.route('/api/cupcakes')
 def list_cupcakes():
-    if request.method == "POST":
-        new_cupcake = Cupcake()
-
     all_cupcakes = [cupcake.serialize() for cupcake in Cupcake.query.all()]
     return jsonify(cupcakes = all_cupcakes)
+
+@app.route('/api/cupcakes', methods = ["POST"])
+def create_cupcakes():
+    new_cupcake = Cupcake(
+        flavor = request.json["flavor"],
+        size = request.json["size"],
+        rating = request.json["rating"],
+        image = request.json["image"]
+    )
+    db.session.add(new_cupcake)
+    db.session.commit()
+    res_json = jsonify(cupcake = new_cupcake.serialize())
+    return (res_json, 201)
 
 @app.route('/api/cupcakes/<int:cupcake_id>')
 def get_cupcake(cupcake_id):
