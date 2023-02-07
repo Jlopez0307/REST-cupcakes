@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="text-center">
+    <h1> Cupcakes </h1>
+    <ul id="cupcake-list" class="list-group"></ul>
+</div>
+
+<h2>Add Cupcake</h2>
+<form action="" id="add-cupcake-form">
+    <div class="mb-3">
+      <label for="flavor" class="form-label">Flavor</label>
+      <input type="text" class="form-control" name="flavor" id="flavor-input">
+    </div>
+    <div class="mb-3">
+        <label for="size" class="form-label">Size</label>
+        <input type="text" class="form-control" name="size" id="size-input">
+    </div>
+    <div class="mb-3">
+        <label for="rating" class="form-label">Rating</label>
+        <input type="text" class="form-control" name="rating" id="rating-input">
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Image</label>
+        <input type="text" class="form-control" name="image" id="image-input">
+    </div>
+    <button type="submit" class="btn btn-primary" id="create-btn">Submit</button>
+</form>
+
+
+{% endblock %}

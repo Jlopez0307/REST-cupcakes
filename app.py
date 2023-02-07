@@ -15,6 +15,12 @@ connect_db(app)
 app.config['SECRET_KEY'] = 'cats'
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
+
+@app.route('/')
+def home_page():
+    all_cupcakes = Cupcake.query.all() 
+    return render_template('cupcakes_home.html', cupcakes = all_cupcakes)
+
 @app.route('/api/cupcakes')
 def list_cupcakes():
     all_cupcakes = [cupcake.serialize() for cupcake in Cupcake.query.all()]
@@ -37,6 +43,25 @@ def create_cupcakes():
 def get_cupcake(cupcake_id):
     cupcake = Cupcake.query.get_or_404(cupcake_id)
     return jsonify(cupcake = cupcake.serialize())
+
+@app.route('/api/cupcakes/<int:cupcake_id>', methods = ["PATCH"])
+def update_cupcake(cupcake_id):
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+    # db.session.query(Cupcake).filter_by(id=id).update(request.json)
+    cupcake.flavor = request.json.get('flavor', cupcake.flavor)
+    cupcake.image = request.json.get('image', cupcake.image)
+    cupcake.rating = request.json.get('rating', cupcake.rating)
+    cupcake.size = request.json.get('size', cupcake.size)
+    db.session.commit()
+    return jsonify(cupcake = cupcake.serialize())
+
+@app.route('/api/cupcakes/<int:cupcake_id>', methods = ["DELETE"])
+def delete_cupcake(cupcake_id):
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+    db.session.delete(cupcake)
+    db.session.commit()
+    return jsonify(message = f'{cupcake.flavor} cupcake deleted')
+
 
 
 
